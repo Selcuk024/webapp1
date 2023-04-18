@@ -80,26 +80,25 @@ if (isset($_SESSION['user'])) {
             </h2>
 
 
-<?php 
-if(isset($_POST['zoekveld'])){
-$statement = $connectie->prepare("SELECT * FROM menukaart WHERE naam LIKE ? ");
-$statement->execute(['%' . $_POST['zoekveld'] . '%']);
-$menuitems = $statement->fetchAll();
+            <?php
+            if (isset($_POST['zoekveld'])) {
+                $statement = $connectie->prepare("SELECT * FROM menukaart WHERE naam LIKE ? ");
+                $statement->execute(['%' . $_POST['zoekveld'] . '%']);
+                $menuitems = $statement->fetchAll();
 
-}
-else{
-$statement = $connectie->query("SELECT * FROM menukaart ");
-$menuitems = $statement->fetchAll();
-}
-foreach($menuitems as $menuitem){
-    echo '   <div class="menu-box">
+            } else {
+                $statement = $connectie->query("SELECT * FROM menukaart ");
+                $menuitems = $statement->fetchAll();
+            }
+            foreach ($menuitems as $menuitem) {
+                echo '   <div class="menu-box">
     <div class="menu-container1">
     <p class="menu-name">' . $menuitem['naam'] . '</p>';
 
 
-echo '<p class="menu-description">' . $menuitem['beschrijving'] . '</p>';
+                echo '<p class="menu-description">' . $menuitem['beschrijving'] . '</p>';
 
-echo '<p class="menu-price"> € ' . $menuitem['prijs'] . '</p>
+                echo '<p class="menu-price"> € ' . $menuitem['prijs'] . '</p>
     </div>
     
 <div class="menu-container1">
@@ -109,34 +108,34 @@ echo '<p class="menu-price"> € ' . $menuitem['prijs'] . '</p>
 </div>
 
 </div>';
-}
-?>
- 
+            }
+            ?>
+
 
 
             <?php
-         //   $resultSet = $connectie->query("SELECT * FROM menukaart");
-         //   while ($item = $resultSet->Fetch()) {
+            //   $resultSet = $connectie->query("SELECT * FROM menukaart");
+            //   while ($item = $resultSet->Fetch()) {
 //
 //
-         //       echo '   <div class="menu-box">
-         //               <div class="menu-container1">
-         //               <p class="menu-name">' . $item['naam'] . '</p>';
+            //       echo '   <div class="menu-box">
+            //               <div class="menu-container1">
+            //               <p class="menu-name">' . $item['naam'] . '</p>';
 //
 //
-         //       echo '<p class="menu-description">' . $item['beschrijving'] . '</p>';
+            //       echo '<p class="menu-description">' . $item['beschrijving'] . '</p>';
 //
-         //       echo '<p class="menu-price"> € ' . $item['prijs'] . '</p>
-         //               </div>
-         //               
-         //       <div class="menu-container1">
+            //       echo '<p class="menu-price"> € ' . $item['prijs'] . '</p>
+            //               </div>
+            //               
+            //       <div class="menu-container1">
 //
-         //       <button class="add">Add</button>
+            //       <button class="add">Add</button>
 //
-         //   </div>
-         //   
-         //   </div>'; 
-           // }
+            //   </div>
+            //   
+            //   </div>'; 
+            // }
             ?>
 
 
@@ -146,13 +145,13 @@ echo '<p class="menu-price"> € ' . $menuitem['prijs'] . '</p>
 
     </div>
 
-<?php
+    <?php
     include_once("login.php");
 
     include_once("register.php");
-?>
+    ?>
 
-                    
+
 
 </body>
 

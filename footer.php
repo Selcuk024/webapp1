@@ -13,13 +13,13 @@
             Openingstijden
         </p>
         <p class="footer-content">
-        Maandag: 16:00 - 00:00 <br>
-        Dinsdag: 16:00 - 00:00 <br>
-        Woensdag: 16:00 - 00:00 <br>
-        Donderdag: 16:00 - 00:00 <br>
-        Vrijdag: 16:00 - 02:00 <br>
-        Zaterdag: 16:00 - 02:00 <br>
-        Zondag: 16:00 - 23:45 
+            Maandag: 16:00 - 00:00 <br>
+            Dinsdag: 16:00 - 00:00 <br>
+            Woensdag: 16:00 - 00:00 <br>
+            Donderdag: 16:00 - 00:00 <br>
+            Vrijdag: 16:00 - 02:00 <br>
+            Zaterdag: 16:00 - 02:00 <br>
+            Zondag: 16:00 - 23:45
         </p>
     </div>
     <div class="text-container">
@@ -27,9 +27,9 @@
             Adres
         </p>
         <p class="footer-content">
-        Vlakkers 226A <br>
-        6651 HS Druten <br>
-        0487-507477 
+            Vlakkers 226A <br>
+            6651 HS Druten <br>
+            0487-507477
         </p>
     </div>
 </footer>

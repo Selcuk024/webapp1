@@ -81,7 +81,7 @@ if (isset($_SESSION['user'])) {
                 </svg> 
                 </a>
                 <form action="delete.php" method="post">
-                <input type="hidden" name="id" value="'. $item['id'] . '">
+                <input type="hidden" name="id" value="' . $item['id'] . '">
                 <button class="del" type="submit">
                 <svg class="del1" width="60" height="60" viewBox="0 0 60 60" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -128,21 +128,21 @@ if (isset($_SESSION['user'])) {
 
                 <div class="container">
                     <?php
-                   if (isset($_POST['send'])) {
-                    $dishname = $_POST['dish-name'];
-                    $description = $_POST['description'];
-                    $price = $_POST['price'];
-                
-                    $stmt = $connectie->prepare("INSERT INTO menukaart (naam, beschrijving, prijs) VALUES (?, ?, ?)");
-                    
-                    if ($stmt->execute([$dishname, $description, $price])) {
-                        echo "Dish added successfully";
-                        header("refresh:0");
-                    } else {
-                        echo "Error: " . implode("", $stmt->errorinfo());
+                    if (isset($_POST['send'])) {
+                        $dishname = $_POST['dish-name'];
+                        $description = $_POST['description'];
+                        $price = $_POST['price'];
+
+                        $stmt = $connectie->prepare("INSERT INTO menukaart (naam, beschrijving, prijs) VALUES (?, ?, ?)");
+
+                        if ($stmt->execute([$dishname, $description, $price])) {
+                            echo "Dish added successfully";
+                            header("refresh:0");
+                        } else {
+                            echo "Error: " . implode("", $stmt->errorinfo());
+                        }
                     }
-                }
-                
+
 
                     ?>
                     <form class="form" action="admin-panel.php" method="post">
@@ -170,10 +170,10 @@ if (isset($_SESSION['user'])) {
     </div>
 
     <?php
-include_once("login.php");
+    include_once("login.php");
 
-include_once("register.php");
-?>
+    include_once("register.php");
+    ?>
 
 </body>
 
