@@ -1,4 +1,6 @@
 <?php
+session_start();
+ob_start();
 $dsn = 'mysql:dbname=menu;host=127.0.0.1';
 $user = 'root';
 $password = '';
@@ -13,8 +15,17 @@ try {
 } catch (PDOException $e) {
     echo "verkeerd" . $e;
 }
-session_start();
 
+
+?>
+<?php
+
+
+$loggedIn = false;
+
+if (isset($_SESSION['user'])) {
+    $loggedIn = true;
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +44,11 @@ session_start();
 <body>
 
     <?php
-    include_once("navbar.php");
+    if (isset($_SESSION['user'])) {
+        include_once("navbar-logged-in.php");
+    } else {
+        include_once("navbar.php");
+    }
     ?>
     <div class="container-admin-panel">
         <div class="test1">
@@ -45,6 +60,7 @@ session_start();
             </div>
 
             <?php
+
             $resultSet = $connectie->query("SELECT * FROM menukaart");
             while ($item = $resultSet->Fetch()) {
 
@@ -55,16 +71,19 @@ session_start();
                     <p class="admin-description">' . $item['beschrijving'] . '</p>
 
                     <p class="admin-price">€ ' . $item['prijs'] . '</p>
-                    <svg class="edit" width="60" height="60" viewBox="0 0 60 60" fill="none"
+                    <a class="edit" href="edit.php?id=' . $item['id'] . '">
+                    <svg class="edit2" width="60" height="60" viewBox="0 0 60 60" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
                         d="M38.2855 17.339C38.0218 17.0752 37.6641 16.9271 37.2911 16.9271C36.9182 16.9271 36.5605 17.0752 36.2967 17.339L33.3801 20.2556C33.3712 20.2645 33.3624 20.2735 33.3538 20.2826L17.3391 36.2973C17.0754 36.561 16.9272 36.9187 16.9272 37.2917V41.6667C16.9272 42.4433 17.5568 43.0729 18.3335 43.0729H22.7085C23.0815 43.0729 23.4391 42.9247 23.7029 42.661L39.7445 26.6194C39.7533 26.6105 39.762 26.6016 39.7706 26.5926L42.6605 23.7027C43.2097 23.1535 43.2097 22.2631 42.6605 21.714L38.2855 17.339ZM34.3748 23.2391L36.7611 25.6254L22.126 40.2604H19.7397V37.8741L34.3748 23.2391ZM38.7498 23.6359L39.6774 22.7083L37.2911 20.3221L36.3636 21.2496L38.7498 23.6359Z"
                         fill="black" />
                     <rect x="2" y="2" width="56" height="56" rx="7" stroke="black" stroke-width="4" />
-                </svg>
-
-             
-                <svg class="del"     width="60" height="60" viewBox="0 0 60 60" fill="none"
+                </svg> 
+                </a>
+                <form action="delete.php" method="post">
+                <input type="hidden" name="id" value="'. $item['id'] . '">
+                <button class="del" type="submit">
+                <svg class="del1" width="60" height="60" viewBox="0 0 60 60" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
                         d="M12.5002 0.833336H47.5002C53.9435 0.833336 59.1668 6.05668 59.1668 12.5V47.5C59.1668 53.9433 53.9435 59.1667 47.5002 59.1667H12.5002C6.05684 59.1667 0.833496 53.9433 0.833496 47.5V12.5C0.833496 6.05668 6.05684 0.833336 12.5002 0.833336ZM52.6561 52.656C54.0236 51.2885 54.7918 49.4339 54.7918 47.5V12.5C54.7918 10.5661 54.0236 8.71147 52.6561 7.34402C51.2887 5.97656 49.434 5.20834 47.5002 5.20834H12.5002C8.47309 5.20834 5.2085 8.47293 5.2085 12.5V47.5C5.2085 49.4339 5.97672 51.2885 7.34418 52.656C8.71163 54.0234 10.5663 54.7917 12.5002 54.7917H47.5002C49.434 54.7917 51.2887 54.0234 52.6561 52.656Z"
@@ -73,7 +92,9 @@ session_start();
                         d="M42.3668 27.8125H17.6335C16.4254 27.8125 15.446 28.7919 15.446 30C15.446 31.2081 16.4254 32.1875 17.6335 32.1875H42.3668C43.575 32.1875 44.5543 31.2081 44.5543 30C44.5543 28.7919 43.575 27.8125 42.3668 27.8125Z"
                         fill="black" />
                 </svg>
-            
+                </button>
+                </form>
+                
             </div>';
             }
             ?>
@@ -95,107 +116,6 @@ session_start();
     </div>
 
 
-    <div class="overlay" id="divOne">
-
-        <div class="wrapper">
-
-            <h3>Welcome Back</h3>
-
-            <a href="#" class="close">&times;</a>
-
-            <div class="content">
-
-                <div class="container">
-
-                    <?php
-                    $mail = isset($_POST['mail']);
-                    $password = isset($_POST['password']);
-                    $stmt = $connectie2->prepare("SELECT * FROM logindata WHERE mail=? AND password=?");
-                    $stmt->execute([$mail, $password]);
-                    $user = $stmt->fetch();
-
-                    if ($user) {
-                        echo 'goed';
-                    } else {
-                        echo 'fout';
-                    }
-                    ?>
-                    <form action="index.php" method="post">
-
-
-                        <label>E-Mail</label>
-
-                        <input type="email" name="mail" class="login-text" placeholder="Your Name">
-
-                        <label class="password-class">Password</label>
-
-                        <input type="password" name="password" id="br" class="login-text" placeholder="Your Password">
-
-                        <input type="submit" class="submit" value="Submit">
-
-                    </form>
-
-                </div>
-
-
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="overlay" id="register">
-
-        <div class="wrapper">
-
-            <h3>Welcome Back</h3>
-
-            <a href="#" class="close">&times;</a>
-
-            <div class="content">
-
-                <div class="container">
-                    <?php
-                    $username = isset($_POST['name']) ? $_POST['name'] : '';
-                    $email = isset($_POST['email']) ? $_POST['email'] : '';
-                    $password2 = isset($_POST['regpassword']) ? $_POST['regpassword'] : '';
-
-
-                    $sql = "INSERT INTO logindata (name, mail, password) VALUES ('$username', '$email', '$password2')";
-                    if ($connectie2->query($sql) === TRUE) {
-                        echo "User created successfully";
-                    } else {
-                        echo "Error: " . implode("", $connectie2->errorinfo());
-                    }
-                    ?>
-
-                    <form action="admin-panel.php" method="post">
-                        <label for="name">Name</label>
-                        <input name="name" type="name" id="name" class="login-text" placeholder="Your Name">
-
-                        <label>E-Mail</label>
-                        <input type="email" name="email" class="login-text" placeholder="Your Email">
-
-                        <label for="password" class="password-class">Password</label>
-                        <input type="password" name="regpassword" class="login-text" placeholder="Your Password">
-
-                        <label for="confirm_password">Confirm Password</label>
-                        <input type="password" placeholder="Confirm Password" id="confirm_password" required>
-
-                        <input type="submit" class="submit" value="Submit">
-                    </form>
-
-
-                </div>
-
-
-
-            </div>
-
-        </div>
-
-    </div>
     <div class="overlay" id="add">
 
         <div class="wrapper">
@@ -208,37 +128,24 @@ session_start();
 
                 <div class="container">
                     <?php
-                    if (isset($_POST['submit'])) {
-
-
-                        $dishname = $_POST['dish-name'];
-                        $description = $_POST['description'];
-                        $price = $_POST['price'];
-
-                        $sql2 = "INSERT INTO menukaart (naam, beschrijving, prijs) VALUES ('$dishname', '$description', '$price')";
-                        
-                        if ($connectieMenu->query($sql2) === TRUE) {
-                            echo "dish added successfully";
-                            // clear the form fields
-                            $dishname = '';
-                            $description = '';
-                            $price = '';
-
-                            
-                        } else {
-
-                            echo "Error: " . implode("", $connectieMenu->errorinfo());
-                        }
-                        echo '<script>
-                        if(window.history.replaceState){
-                            window.history.replaceState(null, null, window.location.href);
-                        }
-                        </script>';
-
+                   if (isset($_POST['send'])) {
+                    $dishname = $_POST['dish-name'];
+                    $description = $_POST['description'];
+                    $price = $_POST['price'];
+                
+                    $stmt = $connectie->prepare("INSERT INTO menukaart (naam, beschrijving, prijs) VALUES (?, ?, ?)");
+                    
+                    if ($stmt->execute([$dishname, $description, $price])) {
+                        echo "Dish added successfully";
+                        header("refresh:0");
+                    } else {
+                        echo "Error: " . implode("", $stmt->errorinfo());
                     }
+                }
+                
 
                     ?>
-                    <form action="admin-panel.php" method="post">
+                    <form class="form" action="admin-panel.php" method="post">
                         <label for="name">Dish Name</label>
                         <input name="dish-name" type="text" id="name" class="login-text" placeholder="Dish Name">
 
@@ -248,7 +155,7 @@ session_start();
                         <label class="password-class">Price</label>
                         <input type="number" name="price" class="login-text" placeholder="Price">
 
-                        <input type="submit" name="submit" class="submit-dish" value="Submit">
+                        <input type="submit" name="send" class="submit-dish" value="Submit">
                     </form>
 
 
@@ -261,7 +168,18 @@ session_start();
         </div>
 
     </div>
+
+    <?php
+include_once("login.php");
+
+include_once("register.php");
+?>
+
 </body>
+
+<?php
+include_once("footer.php");
+?>
 
 <script src="javascript/login.js"></script>
 
@@ -273,5 +191,8 @@ session_start();
 
 <script src="javascript/delete.js"></script>
 
+<?php
+ob_end_flush();
+?>
 
 </html>

@@ -1,0 +1,11 @@
+                <?php
+                    $resultSet = $connectie->query("SELECT + FROM   menukaart");
+                    while ($item = $reusltSet>Fetch()){
+
+                    
+                   echo '<p class="menu-name">' . $item['naam'] . '</p>';
+                }
+                ?>
+
+<img src="media/background.svg" class="bg1">
+       <img src="media/background.svg" class="bg2">
